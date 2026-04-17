@@ -1,10 +1,7 @@
 codeunit 60101 "SetupFields Helper"
 {
     Permissions =
-        tabledata "DCC Dim Corr Setup" = RIMD,
-        tabledata Field = r;
-
-
+        tabledata "DCC Dim Corr Setup" = RIMD;
 
     trigger OnRun()
     var
@@ -15,36 +12,38 @@ codeunit 60101 "SetupFields Helper"
 
     procedure PopulateSetupFields()
     var
-        DimCorrSetup: Record "DCC Dim Corr Setup";
-        FieldRec: Record Field;
-        a: Record 18;
     begin
-        GetPrimaryKeyFields(18);
-
+        InsertSetupFields(17, 1, 0, 0, 0, 23, 24, 481, 482, 483, 484, 485, 486, 480, 6, false);
+        InsertSetupFields(21, 1, 0, 0, 0, 23, 24, 481, 482, 483, 484, 485, 486, 480, 6, false);
+        InsertSetupFields(25, 1, 0, 0, 0, 23, 24, 481, 482, 483, 484, 485, 486, 480, 6, false);
+        InsertSetupFields(32, 1, 0, 0, 0, 33, 34, 481, 482, 483, 484, 485, 486, 480, 6, false);
+        InsertSetupFields(112, 3, 0, 0, 0, 29, 30, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(113, 3, 4, 0, 0, 40, 41, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(114, 3, 0, 0, 0, 29, 30, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(115, 3, 0, 0, 0, 40, 41, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(122, 3, 0, 0, 0, 29, 30, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(123, 3, 4, 0, 0, 40, 41, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(124, 3, 0, 0, 0, 29, 30, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(125, 3, 4, 0, 0, 40, 41, 0, 0, 0, 0, 0, 0, 480, 3, false);
+        InsertSetupFields(271, 1, 0, 0, 0, 23, 24, 481, 482, 483, 484, 485, 486, 480, 6, false);
+        InsertSetupFields(379, 1, 0, 0, 0, 21, 22, 0, 0, 0, 0, 0, 0, 0, 6, false);
+        InsertSetupFields(380, 1, 0, 0, 0, 21, 22, 0, 0, 0, 0, 0, 0, 0, 6, false);
+        InsertSetupFields(5744, 1, 0, 0, 0, 23, 24, 0, 0, 0, 0, 0, 0, 480, 1, false);
+        InsertSetupFields(5745, 1, 2, 0, 0, 8, 9, 0, 0, 0, 0, 0, 0, 480, 1, false);
+        InsertSetupFields(5746, 1, 0, 0, 0, 23, 24, 0, 0, 0, 0, 0, 0, 480, 1, false);
+        InsertSetupFields(5747, 1, 2, 0, 0, 8, 9, 0, 0, 0, 0, 0, 0, 480, 1, false);
+        InsertSetupFields(5802, 1, 0, 0, 0, 33, 34, 481, 482, 483, 484, 485, 486, 480, 6, false);
     end;
 
-    procedure GetPrimaryKeyFields(TableId: Integer)
+    procedure InsertSetupFields(TableId: Integer; PrimaryKey1: Integer; PrimaryKey2: Integer; PrimaryKey3: Integer; PrimaryKey4: Integer; Dimension1FieldNo: Integer; Dimension2FieldNo: Integer; Dimension3FieldNo: Integer; Dimension4FieldNo: Integer; Dimension5FieldNo: Integer; Dimension6FieldNo: Integer; Dimension7FieldNo: Integer; Dimension8FieldNo: Integer; DimensionSetIdFieldNo: Integer; DocumentNoFieldNo: Integer; Skip: Boolean)
     var
-        RecRef: RecordRef;
-        FieldRef: FieldRef;
-        i: Integer;
-        a: Record 18;
+        DimCorrSetup: Record "DCC Dim Corr Setup";
     begin
-        RecRef.Open(TableId);
-        Message('Number of keys: %1', RecRef.KeyCount());
-
-        for i := 1 to RecRef.KeyCount do begin
-            Message('Key %1 has %2 fields', i, RecRef.Field(i).Caption());
+        if DimCorrSetup.Get(TableId) then begin
+            Message('Setup fields for table %1 already exist. Skipping insert.', TableId);
+            exit;
         end;
-        RecRef.Close();
-    end;
-
-
-    procedure UpdateSetupTable(TableId: Integer; PrimaryKey1: Integer; PrimaryKey2: Integer; PrimaryKey3: Integer; PrimaryKey4: Integer; Dimension1FieldNo: Integer; Dimension2FieldNo: Integer; Dimension3FieldNo: Integer; Dimension4FieldNo: Integer; Dimension5FieldNo: Integer; Dimension6FieldNo: Integer; Dimension7FieldNo: Integer; Dimension8FieldNo: Integer; DocumentNoFieldNo: Integer)
-    var
-        DimCorrSetup: Record "DCC Dim Corr Setup";
-    begin
-        DimCorrSetup.Get(TableId);
+        DimCorrSetup.Init();
         DimCorrSetup.Validate("Table Id", TableId);
         DimCorrSetup.Validate("Primary Key 1", PrimaryKey1);
         DimCorrSetup.Validate("Primary Key 2", PrimaryKey2);
@@ -58,7 +57,9 @@ codeunit 60101 "SetupFields Helper"
         DimCorrSetup.Validate("Dimension 6 - Field No.", Dimension6FieldNo);
         DimCorrSetup.Validate("Dimension 7 - Field No.", Dimension7FieldNo);
         DimCorrSetup.Validate("Dimension 8 - Field No.", Dimension8FieldNo);
+        DimCorrSetup.Validate("Dimension Set Id - Field No.", DimensionSetIdFieldNo);
         DimCorrSetup.Validate("Document No. Field No.", DocumentNoFieldNo);
-        DimCorrSetup.Modify();
+        DimCorrSetup.Validate("Skip", Skip);
+        DimCorrSetup.Insert();
     end;
 }
