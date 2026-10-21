@@ -1,1 +1,5 @@
 .vscode/
+.alpackages/
+.snapshots/
+.output/
+rad.json
