@@ -4,6 +4,10 @@ This extension provides a controlled way to correct dimensions on posted documen
 
 It uses a setup-driven mapping between table fields and dimension fields, generates editable worksheet lines, and applies updates with an audit log.
 
+## Installation
+
+Download the zip from [Releases](https://github.com/rpshbhandari/Dimension-Correction/releases), extract the `.app` and deploy it to your Business Central environment.
+
 ## Main Objects
 
 - Table `60100` - `DCC Dim Corr Setup`: Stores per-table field mapping (document no., primary keys, dimension fields, dimension set id field).

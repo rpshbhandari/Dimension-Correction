@@ -3,3 +3,4 @@
 .snapshots/
 .output/
 rad.json
+*.app
